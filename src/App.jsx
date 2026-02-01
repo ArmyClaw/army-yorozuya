@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './App.css'
 
 function App() {
   const [cursorVisible, setCursorVisible] = useState(true)
+  const [inputValue, setInputValue] = useState('')
+  const inputRef = useRef(null)
   
   // 光标闪烁效果
   useEffect(() => {
@@ -11,6 +13,33 @@ function App() {
     }, 500)
     return () => clearInterval(interval)
   }, [])
+
+  // 键盘事件处理
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // 如果不是在输入状态下，按任意键进入输入模式
+      if (!inputValue && e.target.tagName !== 'INPUT') {
+        e.preventDefault()
+        inputRef.current?.focus()
+      }
+    }
+
+    const handleKeyPress = (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        e.preventDefault()
+        // 将按键添加到输入值中
+        setInputValue(prev => prev + e.key)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keypress', handleKeyPress)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keypress', handleKeyPress)
+    }
+  }, [inputValue])
   
   // 技术栏目数据 - 终端风格
   const techSections = [
@@ -243,12 +272,45 @@ function App() {
               <div className="command-line">
                 <span className="output-text success">✓ 系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}</span>
               </div>
-              <div className="command-line">
+              <div className="command-line" onClick={() => inputRef.current?.focus()}>
                 <span className="command-prompt user"></span>
                 <span className="output-text">
-                  <span style={{ color: '#00ffff' }}>输入命令</span> 
-                  {cursorVisible && <span className="cursor"></span>}
+                  {!inputValue ? (
+                    <>
+                      <span style={{ color: '#00ffff' }}>输入命令</span> 
+                      {cursorVisible && <span className="cursor"></span>}
+                    </>
+                  ) : (
+                    <span>{inputValue}{cursorVisible && <span className="cursor"></span>}</span>
+                  )}
                 </span>
+                {/* 透明输入框用于捕获键盘输入 */}
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace' && inputValue === '') {
+                      e.preventDefault(); // 防止在空输入时删除字符
+                    }
+                  }}
+                  style={{
+                    position: 'absolute',
+                    opacity: 0,
+                    width: '1px',
+                    height: '1px',
+                    border: 'none',
+                    outline: 'none',
+                    pointerEvents: 'none'
+                  }}
+                  onFocus={() => {
+                    // 确保获得焦点时输入框可见（对于某些设备）
+                    if (!inputValue) {
+                      setInputValue('');
+                    }
+                  }}
+                />
               </div>
             </div>
           </div>
