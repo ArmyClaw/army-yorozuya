@@ -177,10 +177,15 @@ function App() {
             <span className="output-text system">========================================</span>
           </div>
           <div className="welcome-title">
-            <div className="bear-icon">{'  ___  \n (._.).\n  <|> \n  / \\ '.split('\n').map((line, index) => (
-              <div key={index} className="bear-line">{line}</div>
-            ))}</div>
-            <div className="title-text">Army's Yorozuya</div>
+            <div className="title-container">
+              <div className="bear-icon">{'  ___  \n (._.).\n  <|> \n  / \\ '.split('\n').map((line, index) => (
+                <div key={index} className="bear-line">{line}</div>
+              ))}</div>
+              <div className="title-text">Army's Yorozuya</div>
+              <div className="log-pattern">
+                <pre className="log-characters">{'██████╗  █████╗ ██╗   ██╗███████╗\n██╔══██╗██╔══██╗██║   ██║██╔════╝\n██████╔╝███████║██║   ██║█████╗  \n██╔══██╗██╔══██║██║   ██║██╔══╝  \n██████╔╝██║  ██║╚██████╔╝███████╗\n╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝'}</pre>
+              </div>
+            </div>
           </div>
           <p className="welcome-subtitle">技术探索与创新空间 — 终端模式</p>
           <div className="command-line">
