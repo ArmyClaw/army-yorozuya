@@ -1,0 +1,53 @@
+# OpenClaw命令行风格网站 - Docker Compose配置
+
+version: '3.8'
+
+services:
+  # Nginx前端服务
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: army-yorozuya-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - army-yorozuya-network
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - ./ssl:/etc/nginx/ssl:ro
+    environment:
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # 后端API服务（预留）
+  # backend:
+  #   image: node:18-alpine
+  #   container_name: army-yorozuya-backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - army-yorozuya-network
+  #   volumes:
+  #     - ../backend:/app
+  #     - ./logs/backend:/app/logs
+  #   working_dir: /app
+  #   command: npm start
+  #   environment:
+  #     - NODE_ENV=production
+  #     - TZ=Asia/Shanghai
+  #   depends_on:
+  #     - nginx
+
+networks:
+  army-yorozuya-network:
+    driver: bridge
+    name: army-yorozuya-network

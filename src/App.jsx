@@ -1,50 +1,80 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  // 二进制代码飘落效果
-  const binaryRainRef = useRef(null)
+  const [cursorVisible, setCursorVisible] = useState(true)
   
+  // 光标闪烁效果
   useEffect(() => {
-    const container = binaryRainRef.current
-    if (!container) return
-    
-    const createBinaryDigit = () => {
-      const digit = document.createElement('div')
-      digit.className = 'binary-digit'
-      digit.textContent = Math.random() > 0.5 ? '1' : '0'
-      digit.style.left = `${Math.random() * 100}%`
-      digit.style.animationDuration = `${Math.random() * 3 + 2}s`
-      digit.style.animationDelay = `${Math.random() * 2}s`
-      digit.style.opacity = `${Math.random() * 0.5 + 0.1}`
-      container.appendChild(digit)
-      
-      // 移除超出容器的元素
-      setTimeout(() => {
-        if (digit.parentNode === container) {
-          container.removeChild(digit)
-        }
-      }, 5000)
-    }
-    
-    // 创建初始的二进制数字
-    for (let i = 0; i < 30; i++) {
-      setTimeout(() => createBinaryDigit(), i * 100)
-    }
-    
-    // 持续创建新的二进制数字
     const interval = setInterval(() => {
-      if (container.children.length < 50) {
-        createBinaryDigit()
-      }
-    }, 200)
-    
+      setCursorVisible(v => !v)
+    }, 500)
     return () => clearInterval(interval)
   }, [])
-  // 技术栏目数据 - 每个栏目占满横屏
+  
+  // 技术栏目数据 - 终端风格
   const techSections = [
     { 
       id: 1, 
+      name: 'AI编程核心技术', 
+      description: 'AI编程的主要技术和模型', 
+      icon: '🤖',
+      content: {
+        title: 'AI编程核心技术与模型',
+        sections: [
+          {
+            subtitle: '🧠 大型语言模型',
+            points: [
+              'GPT系列 - OpenAI的生成预训练 Transformer 模型',
+              'Claude系列 - Anthropic的安全对齐AI助手模型',
+              'Gemini - Google的多模态AI模型',
+              'LLaMA系列 - Meta的开源大语言模型',
+              'Qwen - 阿里巴巴的通义千问系列模型'
+            ]
+          },
+          {
+            subtitle: '🛠️ AI编程工具',
+            points: [
+              'VS Code + Copilot - AI代码补全与生成',
+              'Cursor - AI驱动的智能代码编辑器',
+              'GitHub Copilot - AI代码助手',
+              'Tabnine - AI代码预测工具',
+              'Codeium - 免费的AI编程助手'
+            ]
+          },
+          {
+            subtitle: '🔧 开发框架与库',
+            points: [
+              'LangChain - LLM应用开发框架',
+              'LlamaIndex - 数据索引与检索框架',
+              'Transformers - Hugging Face模型库',
+              'PyTorch - 深度学习框架',
+              'OpenAI API - 便捷的AI服务接口'
+            ]
+          },
+          {
+            subtitle: '⚡ 部署与推理',
+            points: [
+              'vLLM - 高效的LLM服务推理',
+              'TensorRT-LLM - NVIDIA的推理优化',
+              'ONNX - 开放神经网络交换格式',
+              'Docker/Kubernetes - 容器化部署',
+              'FastAPI - 高性能API开发框架'
+            ]
+          }
+        ],
+        applications: [
+          '💻 自动代码生成 - 提升开发效率',
+          '🔍 智能代码审查 - 提高代码质量',
+          '🔧 自动Bug修复 - 智能错误修正',
+          '📈 代码优化建议 - 性能提升指导',
+          '📚 技术文档生成 - 自动化文档编写',
+          '🔄 测试用例生成 - 自动化测试'
+        ]
+      }
+    },
+    { 
+      id: 2, 
       name: '项目技术栈', 
       description: '当前项目采用的技术架构和工具链', 
       icon: '⚙️',
@@ -63,57 +93,8 @@ function App() {
           '📱 完全响应式设计 - 移动优先',
           '🔒 生产级安全 - HTTPS自动重定向',
           '🚀 一键部署 - Docker容器化',
-          '🎨 现代化UI - 3D动画效果',
+          '🎨 现代化UI - 终端风格界面',
           '📊 性能优化 - 代码分割与懒加载'
-        ]
-      }
-    },
-    { 
-      id: 2, 
-      name: '大模型原理', 
-      description: '大型语言模型的基本原理和工作机制', 
-      icon: '🧠',
-      content: {
-        title: '大型语言模型(Large Language Models)',
-        sections: [
-          {
-            subtitle: '🤖 模型架构',
-            points: [
-              'Transformer架构 - 注意力机制的核心',
-              '自注意力(Self-Attention) - 理解上下文关系',
-              '多头注意力(Multi-Head Attention) - 并行处理不同特征',
-              '前馈神经网络(FFN) - 非线性变换',
-              '位置编码(Positional Encoding) - 序列顺序信息'
-            ]
-          },
-          {
-            subtitle: '📚 训练过程',
-            points: [
-              '预训练(Pre-training) - 海量文本数据学习',
-              '微调(Fine-tuning) - 特定任务优化',
-              '强化学习(RLHF) - 人类反馈对齐',
-              '上下文学习(In-context Learning) - 少样本学习能力',
-              '思维链(Chain-of-Thought) - 推理能力提升'
-            ]
-          },
-          {
-            subtitle: '🔧 关键技术',
-            points: [
-              'Tokenization - 文本分词处理',
-              'Embedding - 向量空间表示',
-              'Softmax - 概率分布输出',
-              'Temperature - 输出多样性控制',
-              'Top-p/Top-k - 采样策略优化'
-            ]
-          }
-        ],
-        applications: [
-          '💬 对话系统 - ChatGPT, Claude',
-          '✍️ 内容生成 - 文章、代码、创意',
-          '🔍 信息检索 - 语义搜索',
-          '📊 数据分析 - 洞察提取',
-          '🎮 游戏AI - 智能NPC',
-          '🎨 创意辅助 - 设计、音乐、艺术'
         ]
       }
     },
@@ -176,128 +157,199 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* 二进制代码飘落效果 */}
-      <div ref={binaryRainRef} className="binary-rain"></div>
-      
-      {/* 电子感技术风格标题 */}
-      <div className="title-container">
-        <h1 className="art-title">
-          <span className="title-text">army's yorozuya</span>
-        </h1>
-        <div className="subtitle">Army的万事屋 - 技术探索与创新空间</div>
+      {/* 终端标题栏 */}
+      <div className="terminal-header">
+        <div className="terminal-dot red"></div>
+        <div className="terminal-dot yellow"></div>
+        <div className="terminal-dot green"></div>
+        <div className="terminal-title">army-yorozuya.art — bash — 80×24</div>
       </div>
 
-      {/* 技术栏目展示区域 - 每个栏目占满横屏 */}
-      <div className="tech-sections-container">
-        {techSections.map(section => (
-          <div key={section.id} className="tech-section-full">
-            {/* 栏目标题区域 */}
-            <div className="section-header">
-              <div className="section-icon">
-                <div className="icon-emoji">{section.icon}</div>
-              </div>
-              <div className="section-title-content">
-                <h2 className="section-name">{section.name}</h2>
-                <p className="section-description">{section.description}</p>
-              </div>
-            </div>
+      {/* 终端内容区域 */}
+      <div className="terminal-content">
+        {/* 欢迎信息 */}
+        <div className="welcome-message">
+          <div className="command-line">
+            <span className="command-prompt user"></span>
+            <span className="output-text">cat welcome.txt</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text system">========================================</span>
+          </div>
+          <div className="welcome-title">
+            <div className="bear-icon">{'  ___  \n (._.).\n  <|> \n  / \\ '.split('\n').map((line, index) => (
+              <div key={index} className="bear-line">{line}</div>
+            ))}</div>
+            <div className="title-text">Army's Yorozuya</div>
+          </div>
+          <p className="welcome-subtitle">技术探索与创新空间 — 终端模式</p>
+          <div className="command-line">
+            <span className="output-text system">========================================</span>
+          </div>
+          <div className="command-line">
+            <span className="command-prompt user"></span>
+            <span className="output-text">echo "系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}"</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">✓ 系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}</span>
+          </div>
+        </div>
 
-            {/* 栏目内容区域 */}
-            <div className="section-content">
-              <h3 className="content-title">{section.content.title}</h3>
-              
-              {/* 项目技术栈 */}
-              {section.id === 1 && (
-                <div className="tech-stack-container">
-                  <div className="tech-grid">
-                    {section.content.technologies.map((tech, index) => (
-                      <div key={index} className="tech-item" style={{ '--tech-color': tech.color }}>
-                        <div className="tech-color-indicator"></div>
-                        <h4 className="tech-name">{tech.name}</h4>
-                        <p className="tech-desc">{tech.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="features-list">
-                    <h4>✨ 核心特性</h4>
-                    <ul>
-                      {section.content.features.map((feature, index) => (
-                        <li key={index}>{feature}</li>
-                      ))}
-                    </ul>
-                  </div>
+        <div className="tech-sections-container">
+          {techSections.map(section => (
+            <div key={section.id} className="tech-section-terminal">
+              {/* 栏目标题区域 */}
+              <div className="section-header">
+                <div className="section-icon">{section.icon}</div>
+                <div className="section-title-content">
+                  <h2 className="section-name">{section.name}</h2>
+                  <p className="section-description">{section.description}</p>
                 </div>
-              )}
+              </div>
 
-              {/* 大模型原理 */}
-              {section.id === 2 && (
-                <div className="llm-content">
-                  {section.content.sections.map((subSection, index) => (
-                    <div key={index} className="llm-subsection">
-                      <h4>{subSection.subtitle}</h4>
-                      <ul>
-                        {subSection.points.map((point, pIndex) => (
-                          <li key={pIndex}>{point}</li>
-                        ))}
-                      </ul>
+              {/* 栏目内容区域 */}
+              <div className="section-content">
+                <h3 className="content-title">{section.content.title}</h3>
+                
+                {/* AI编程核心技术 */}
+                {section.id === 1 && (
+                  <div className="llm-content">
+                    <div className="tech-grid">
+                      {section.content.sections?.map((subSection, index) => (
+                        <div key={index} className="tech-item" style={{ '--tech-color': '#667eea' }}>
+                          <h4 className="tech-name">{subSection.subtitle}</h4>
+                          <ul className="tech-points">
+                            {subSection.points?.map((point, pIndex) => (
+                              <li key={pIndex}>{point}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  <div className="applications-grid">
-                    <h4>🚀 应用场景</h4>
                     <div className="apps-grid">
-                      {section.content.applications.map((app, index) => (
+                      {section.content.applications?.map((app, index) => (
                         <div key={index} className="app-item">
                           {app}
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* 可配置模块 */}
-              {section.id === 3 && (
-                <div className="modules-container">
-                  <div className="modules-grid">
-                    {section.content.modules.map((module, index) => (
-                      <div key={index} className={`module-card ${module.status}`}>
-                        <div className="module-header">
-                          <h4>{module.name}</h4>
-                          <span className={`status-badge ${module.status}`}>
-                            {module.status === 'active' ? '✅ 已启用' : 
-                             module.status === 'developing' ? '🔄 开发中' : '📅 计划中'}
-                          </span>
-                        </div>
-                        <p className="module-desc">{module.description}</p>
-                        <div className="config-tags">
-                          {module.configs.map((config, cIndex) => (
-                            <span key={cIndex} className="config-tag">{config}</span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="module-features">
-                    <h4>🔧 配置系统特性</h4>
-                    <div className="features-grid">
-                      {section.content.features.map((feature, index) => (
-                        <div key={index} className="feature-item">
-                          {feature}
+                {/* 项目技术栈 */}
+                {section.id === 2 && (
+                  <div className="tech-stack-container">
+                    <div className="command-line">
+                      <span className="output-text info">📦 技术栈组件:</span>
+                    </div>
+                    <div className="tech-grid">
+                      {section.content.technologies?.map((tech, index) => (
+                        <div key={index} className="tech-item" style={{ '--tech-color': tech.color }}>
+                          <h4 className="tech-name">{tech.name}</h4>
+                          <p className="tech-desc">{tech.description}</p>
                         </div>
                       ))}
                     </div>
+                    <div className="features-list">
+                      <div className="command-line">
+                        <span className="output-text info">✨ 核心特性:</span>
+                      </div>
+                      <ul>
+                        {section.content.features?.map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+
+                {/* 可配置模块 */}
+                {section.id === 3 && (
+                  <div className="modules-container">
+                    <div className="command-line">
+                      <span className="output-text info">🧩 可用模块:</span>
+                    </div>
+                    <div className="modules-grid">
+                      {section.content.modules.map((module, index) => (
+                        <div key={index} className={`module-card ${module.status}`}>
+                          <div className="module-header">
+                            <h4>{module.name}</h4>
+                            <span className={`status-badge ${module.status}`}>
+                              {module.status === 'active' ? '✅ 已启用' : 
+                               module.status === 'developing' ? '🔄 开发中' : '📅 计划中'}
+                            </span>
+                          </div>
+                          <p className="module-desc">{module.description}</p>
+                          <div className="config-tags">
+                            {module.configs.map((config, cIndex) => (
+                              <span key={cIndex} className="config-tag">{config}</span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="module-features">
+                      <div className="command-line">
+                        <span className="output-text info">🔧 配置系统特性:</span>
+                      </div>
+                      <div className="features-grid">
+                        {section.content.features.map((feature, index) => (
+                          <div key={index} className="feature-item">
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+          ))}
+        </div>
+
+        {/* 系统信息 */}
+        <div className="command-output">
+          <div className="command-line">
+            <span className="command-prompt user"></span>
+            <span className="output-text">systemctl status army-yorozuya</span>
           </div>
-        ))}
+          <div className="command-line">
+            <span className="output-text success">● army-yorozuya.service - Army Yorozuya Web Service</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Loaded: loaded (/etc/systemd/system/army-yorozuya.service; enabled; vendor preset: enabled)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Active: active (running) since {new Date().toLocaleDateString('zh-CN')};</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">   Main PID: 12345 (nginx)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">      Tasks: 5 (limit: 4915)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Memory: 45.2M</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">        CPU: 0.5%</span>
+          </div>
+        </div>
+
+        {/* 命令提示符 */}
+        <div className="command-line">
+          <span className="command-prompt user"></span>
+          <span className="output-text">
+            <span style={{ color: '#00ffff' }}>输入命令</span> 
+            {cursorVisible && <span className="cursor"></span>}
+          </span>
+        </div>
       </div>
 
-      {/* 技术风格页脚 */}
-      <footer className="footer">
-        <p>© 2024 Army's Yorozuya. 保留所有权利。</p>
-        <p>技术探索 | 创新实践 | 模块化开发</p>
+      {/* 终端页脚 */}
+      <footer className="terminal-footer">
+        <p>© 2024 Army's Yorozuya. 保留所有权利。 | 版本: v2.0.0 | 终端模式</p>
+        <p>输入 'help' 查看可用命令 | 按 Ctrl+C 退出</p>
       </footer>
     </div>
   )

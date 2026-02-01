@@ -1,0 +1,204 @@
+# 样式改版记录 - OpenClaw命令行模式
+
+## 改版概述
+
+**日期**: 2026-02-01  
+**目标**: 将网站从"黑白简约技术风格"改为"OpenClaw命令行模式"  
+**状态**: ✅ 已完成并部署
+
+## 改版内容
+
+### 1. CSS样式全面重写
+
+**旧风格**: 黑白简约技术风格（电子感设计）
+- 黑色背景 + 彩色渐变文字
+- 二进制代码飘落效果
+- 电子感扫描线和发光边框
+
+**新风格**: OpenClaw命令行模式
+- 深色终端背景 (#0a0a0a)
+- 绿色终端文字 (#00ff00)
+- 命令行提示符和光标效果
+- 终端窗口模拟（标题栏、内容区、页脚）
+
+### 2. 关键样式变化
+
+#### 颜色系统
+```css
+/* 旧: 多彩渐变 */
+background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+
+/* 新: 终端绿色 */
+color: #00ff00;
+background: #0a0a0a;
+```
+
+#### 字体系统
+```css
+/* 旧: 通用等宽字体 */
+font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+
+/* 新: 扩展终端字体 */
+font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 
+             'Cascadia Code', 'JetBrains Mono', monospace;
+```
+
+#### 界面元素
+- ✅ 终端标题栏（红黄绿窗口控制点）
+- ✅ 命令行提示符（$、user@、root@）
+- ✅ 光标闪烁效果
+- ✅ 命令输出区域
+- ✅ 终端滚动条样式
+- ✅ 响应式终端布局
+
+### 3. React组件更新
+
+#### 新增功能
+- 命令行模拟输出（whoami、pwd、ls、cat等）
+- 动态光标闪烁
+- 命令输入动画效果
+- 终端风格栏目卡片
+
+#### 组件结构
+```jsx
+<div className="app-container">
+  <div className="terminal-header">...</div>
+  <div className="terminal-content">
+    <div className="welcome-message">...</div>
+    <div className="command-output">...</div>
+    <div className="tech-sections-container">...</div>
+    <footer className="terminal-footer">...</div>
+  </div>
+</div>
+```
+
+### 4. 部署架构
+
+#### 技术栈
+- **前端**: React 18 + Vite 5
+- **服务器**: Nginx (Alpine Linux)
+- **容器**: Docker
+- **构建**: npm run build
+
+#### 部署配置
+```
+部署结构:
+├── Dockerfile.simple          # Docker镜像构建
+├── nginx/nginx.conf          # Nginx服务器配置
+├── dist/                     # 构建输出目录
+└── deploy-sudo.sh           # 部署脚本
+```
+
+#### 容器信息
+- **镜像名称**: army-yorozuya:simple
+- **容器名称**: army-yorozuya-nginx
+- **端口映射**: 80:80
+- **重启策略**: 默认（手动启动）
+
+## 部署状态
+
+### 当前运行状态
+✅ **容器运行中**: army-yorozuya-nginx  
+✅ **端口监听**: 0.0.0.0:80  
+✅ **网站可访问**: http://localhost  
+✅ **HTTP状态**: 200 OK
+
+### 访问方式
+1. **本地访问**: http://localhost
+2. **网络访问**: http://服务器IP
+3. **容器日志**: `sudo docker logs army-yorozuya-nginx`
+
+### 管理命令
+```bash
+# 查看状态
+sudo docker ps --filter "name=army-yorozuya"
+
+# 查看日志
+sudo docker logs -f army-yorozuya-nginx
+
+# 停止服务
+sudo docker stop army-yorozuya-nginx
+
+# 重启服务
+sudo docker restart army-yorozuya-nginx
+
+# 删除服务
+sudo docker rm -f army-yorozuya-nginx
+
+# 重新部署
+cd projects/army-yorozuya/deploy
+sudo docker build -f Dockerfile.simple -t army-yorozuya:simple .
+sudo docker run -d --name army-yorozuya-nginx -p 80:80 army-yorozuya:simple
+```
+
+## 设计特色
+
+### 1. 终端美学
+- **颜色方案**: 经典绿色终端 (#00ff00) 配深黑背景
+- **字体选择**: 专业等宽字体，确保代码可读性
+- **间距布局**: 紧凑但清晰的命令行布局
+
+### 2. 交互效果
+- **光标动画**: 模拟真实终端光标闪烁
+- **命令输出**: 逐步显示的命令历史
+- **响应式设计**: 适配桌面和移动端终端
+
+### 3. 功能区域
+1. **终端标题栏**: 窗口控制点和标题
+2. **欢迎信息**: 网站标题和描述
+3. **命令历史**: 模拟的命令行交互
+4. **技术栏目**: 终端风格的内容卡片
+5. **终端页脚**: 版权信息和状态提示
+
+## 技术实现
+
+### CSS关键技术
+1. **背景纹理**: 使用CSS渐变创建终端网格背景
+2. **扫描线效果**: 动画模拟CRT显示器扫描线
+3. **边框样式**: 半透明绿色边框定义终端区域
+4. **滚动条定制**: 终端风格的滚动条设计
+5. **响应式断点**: 针对不同屏幕尺寸优化
+
+### React关键技术
+1. **状态管理**: 使用useState控制命令显示和光标状态
+2. **副作用处理**: useEffect处理光标闪烁和命令序列
+3. **动态样式**: 根据状态应用不同的CSS类
+4. **组件化**: 模块化的终端界面组件
+
+### 部署关键技术
+1. **Docker优化**: 使用Alpine Linux减小镜像体积
+2. **Nginx配置**: 优化的静态文件服务和缓存策略
+3. **构建流程**: Vite生产构建优化资源加载
+4. **权限处理**: 提供sudo和非sudo部署选项
+
+## 后续优化建议
+
+### 短期优化
+1. **添加HTTPS支持**: 配置SSL证书
+2. **域名绑定**: 配置自定义域名
+3. **日志管理**: 设置日志轮转和监控
+4. **健康检查**: 添加容器健康检查端点
+
+### 中期优化
+1. **CI/CD集成**: 自动化构建和部署
+2. **CDN加速**: 静态资源CDN分发
+3. **性能监控**: 添加性能指标监控
+4. **备份策略**: 定期备份配置和数据
+
+### 长期优化
+1. **多环境部署**: 开发/测试/生产环境分离
+2. **负载均衡**: 多实例负载均衡
+3. **安全加固**: 全面的安全策略配置
+4. **国际化**: 多语言支持
+
+## 总结
+
+本次改版成功将army-yorozuya网站从原有的"黑白简约技术风格"转变为"OpenClaw命令行模式"，实现了以下目标：
+
+✅ **风格转换**: 从电子感设计转为终端命令行界面  
+✅ **功能完整**: 保留了所有原有功能，以终端形式呈现  
+✅ **部署成功**: 通过Docker + Nginx成功部署并运行  
+✅ **响应式设计**: 适配各种屏幕尺寸的终端显示  
+✅ **用户体验**: 提供了沉浸式的命令行交互体验  
+
+网站现在具有独特的终端美学，既体现了技术专业性，又提供了新颖的用户体验。部署架构简单可靠，便于维护和扩展。
