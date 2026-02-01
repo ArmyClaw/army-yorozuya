@@ -28,7 +28,7 @@ function App() {
               'GPT系列 - OpenAI的生成预训练 Transformer 模型',
               'Claude系列 - Anthropic的安全对齐AI助手模型',
               'Gemini - Google的多模态AI模型',
-              'LLaMA系列 - Meta的开源大语言模型',
+              'LLaMA系列 - Meta的开源大模型',
               'Qwen - 阿里巴巴的通义千问系列模型'
             ]
           },
@@ -155,6 +155,55 @@ function App() {
     }
   ]
 
+  // LogCharactersDisplay component to render log.txt with transparent spaces and white non-spaces
+  const LogCharactersDisplay = () => {
+    const logContent = `                        ███           ██                                        
+                       █████         ████                                       
+                       █████  ████   ████                                       
+                     ██████████████████████                                     
+                  ████████████████████████████                                  
+                ████████████████████████████████                                
+               ███████████████████████████████████                              
+             ██████████████████████████████████████                             
+            ████████████████████████████████████████                            
+           ██  ██████████  ███████████████████████████                          
+     ███████    █████████   ███████████████████████████                         
+   ███     █████████████████████████████████████████████                        
+ ████        ████████████████████████████████████████████                       
+██████       █████████████████████████████████████████████                      
+████████████████████████████████████████████████████████████                     
+████████████████████████████████████████████████████████████                     
+█████████████████████████████████████████████████████████████                    
+█████████████████████████████████████████████████████████████                   
+███████████████████    █████████████████████████████████████                   
+ ██████████           ███████████████████████████████████████                  
+  ████████████████████████████████████████████████████████████                  
+    ███████████████████████████████████████████████████████████                 
+      █████████████████████████████████████████████████████████                 
+        ███████████████████████████████████████████████████████                 
+           █████████████████████████████████████████████████████                
+             ███████████████████████████████████████████████████                
+            █████████████████████████████████████████████████████               
+            █████████████████████████████████████████████████████               
+           ██████████████████████████████████████████████████████               
+           ██████████████████████████████████████████████████████               
+          ████████████████████████████████████████████████████████              
+          ████████████████████████████████████████████████████████              
+         ████████████████████████████████ ████████████████████████              
+        ████████████████████████████████  ██████████████████████ ██             
+       █████████████████████████████████  ██████████████████████  █             
+       █████████████████████████████████ ███████████████████████  █             
+      ██████████████████████████████████ ███████████████████████  █            
+     ███████████████████████████████████ ███████████████████████ ███            
+     ███████████████████████████████████ ███████████████████████ ███            
+    ████████████████████████████████████ ██████████████████████  ███            
+    ████████████████████████████████████ ██████████████████████  ███            
+   █████████████████████████████████████ ██████████████████████  ███            
+   █████████████████████████████████████ █████████████████████  ████`;
+    
+    return <div className="log-characters" style={{ display: 'inline-block', verticalAlign: 'top', fontFamily: 'monospace', fontSize: '2px', lineHeight: 1, whiteSpace: 'pre', color: 'white' }}>{logContent}</div>;
+  };
+
   return (
     <div className="app-container">
       {/* 终端标题栏 */}
@@ -177,26 +226,31 @@ function App() {
             <span className="output-text system">========================================</span>
           </div>
           <div className="welcome-title">
-            <div className="title-container">
-              <div className="bear-icon">{'  ___  \n (._.).\n  <|> \n  / \\ '.split('\n').map((line, index) => (
-                <div key={index} className="bear-line">{line}</div>
-              ))}</div>
-              <div className="title-text">Army's Yorozuya</div>
-              <div className="log-pattern">
-                <pre className="log-characters">{'██████╗  █████╗ ██╗   ██╗███████╗\n██╔══██╗██╔══██╗██║   ██║██╔════╝\n██████╔╝███████║██║   ██║█████╗  \n██╔══██╗██╔══██║██║   ██║██╔══╝  \n██████╔╝██║  ██║╚██████╔╝███████╗\n╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝'}</pre>
-              </div>
-            </div>
+            <span className="title-text" style={{ whiteSpace: 'nowrap', marginRight: '10px' }}>Army's Yorozuya</span>
+            <LogCharactersDisplay />
           </div>
           <p className="welcome-subtitle">技术探索与创新空间 — 终端模式</p>
           <div className="command-line">
             <span className="output-text system">========================================</span>
           </div>
-          <div className="command-line">
-            <span className="command-prompt user"></span>
-            <span className="output-text">echo "系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}"</span>
-          </div>
-          <div className="command-line">
-            <span className="output-text success">✓ 系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}</span>
+          {/* 包含系统状态和输入命令的居中容器 */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div className="command-line">
+                <span className="command-prompt user"></span>
+                <span className="output-text">echo "系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}"</span>
+              </div>
+              <div className="command-line">
+                <span className="output-text success">✓ 系统状态: 在线 | 用户: army | 时间: {new Date().toLocaleString('zh-CN')}</span>
+              </div>
+              <div className="command-line">
+                <span className="command-prompt user"></span>
+                <span className="output-text">
+                  <span style={{ color: '#00ffff' }}>输入命令</span> 
+                  {cursorVisible && <span className="cursor"></span>}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -267,7 +321,7 @@ function App() {
                     </div>
                   </div>
                 )}
-
+                
                 {/* 可配置模块 */}
                 {section.id === 3 && (
                   <div className="modules-container">
@@ -313,6 +367,35 @@ function App() {
         </div>
 
         {/* 系统信息 */}
+        <div className="command-output">
+          <div className="command-line">
+            <span className="command-prompt user"></span>
+            <span className="output-text">systemctl status army-yorozuya</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">● army-yorozuya.service - Army Yorozuya Web Service</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Loaded: loaded (/etc/systemd/system/army-yorozuya.service; enabled; vendor preset: enabled)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Active: active (running) since {new Date().toLocaleDateString('zh-CN')};</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">   Main PID: 12345 (nginx)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">      Tasks: 5 (limit: 4915)</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">     Memory: 45.2M</span>
+          </div>
+          <div className="command-line">
+            <span className="output-text success">        CPU: 0.5%</span>
+          </div>
+        </div>
+
+        {/* 系统状态信息 */}
         <div className="command-output">
           <div className="command-line">
             <span className="command-prompt user"></span>

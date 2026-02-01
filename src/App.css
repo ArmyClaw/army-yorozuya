@@ -233,63 +233,9 @@ body::after {
   align-items: center;
   gap: 10px; /* 图标和文字之间的间距 */
   align-self: center; /* 居中对齐 */
-}
-
-.title-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.log-pattern {
-  display: inline-block;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.log-characters {
-  color: white;
-  font-size: 8px;
-  line-height: 1;
-  letter-spacing: 0;
-  margin: 0;
-  padding: 0;
-  font-family: monospace;
-  white-space: pre;
-  background: transparent;
-  border: none;
-  overflow: visible;
-  display: inline;
-  line-height: 1;
-}
-
-.log-characters::selection {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* 在不同屏幕尺寸下的适配 */
-@media (max-width: 768px) {
-  .title-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .log-pattern {
-    margin-left: 0;
-    margin-top: 10px;
-  }
-  
-  .log-characters {
-    font-size: 6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .log-characters {
-    font-size: 5px;
-  }
+  flex-wrap: nowrap; /* 防止换行 */
+  min-width: 0; /* 允许收缩 */
+  flex: 0 0 auto; /* 不伸展，但可收缩 */
 }
 
 .bear-icon {
@@ -715,4 +661,30 @@ body::after {
 
 .terminal-content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 127, 0, 0.5);
+}
+
+/* log.txt字符样式 */
+.log-characters {
+  font-size: 2px;
+  margin: 0;
+  padding: 0;
+  font-family: monospace, 'Courier New', courier, monospace;
+  white-space: pre;
+  background: transparent;
+  border: none;
+  overflow: visible; /* 确保内容不会被裁剪 */
+  display: inline-block;
+  line-height: 1; /* 消除行间距 */
+  font-variant-ligatures: none;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  text-rendering: optimizeSpeed;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  word-spacing: 0;
+  font-variant: normal;
+  text-align: left;
+  vertical-align: top;
+  color: white; /* 改为白色 */
+  max-width: 100%; /* 防止内容溢出 */
+  box-sizing: border-box;
 }

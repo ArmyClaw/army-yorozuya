@@ -1,4 +1,19 @@
-                        ███           ██                                        
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// 读取log.txt内容
+const logFilePath = path.join(__dirname, 'log.txt');
+let logContent = '';
+
+if (fs.existsSync(logFilePath)) {
+  logContent = fs.readFileSync(logFilePath, 'utf8');
+} else {
+  console.log('log.txt文件不存在，使用默认内容');
+  logContent = `                        ███           ██                                        
                        █████         ████                                       
                        █████  ████   ████                                       
                      ██████████████████████                                     
@@ -40,4 +55,25 @@
     ████████████████████████████████████ ██████████████████████  ███            
     ████████████████████████████████████ ██████████████████████  ███            
    █████████████████████████████████████ ██████████████████████  ███            
-   █████████████████████████████████████ █████████████████████  ████            
+   █████████████████████████████████████ █████████████████████  ████`;
+}
+
+// 读取App.jsx文件
+const appJsxPath = path.join(__dirname, 'src', 'App.jsx');
+let appContent = fs.readFileSync(appJsxPath, 'utf8');
+
+// 替换LogCharactersDisplay组件的实现，使其使用动态logContent
+const newComponentCode = `  // LogCharactersDisplay component to render log.txt
+  const LogCharactersDisplay = () => {
+    const logContent = \`${logContent.replace(/[\\`$]/g, '\\$&')}\`;
+    
+    return <div className="log-characters" style={{ display: 'inline-block', verticalAlign: 'top', fontFamily: 'monospace', fontSize: '2px', lineHeight: 1, whiteSpace: 'pre', color: 'white' }}>{logContent}</div>;
+  };`;
+
+// 查找旧的组件定义并替换
+const oldComponentRegex = /  \/\/ LogCharactersDisplay component[\s\S]*?  \};/;
+appContent = appContent.replace(oldComponentRegex, newComponentCode);
+
+// 写回App.jsx文件
+fs.writeFileSync(appJsxPath, appContent);
+console.log('App.jsx已更新，LogCharactersDisplay组件现在使用log.txt的内容');
